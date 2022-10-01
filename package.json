@@ -1,0 +1,48 @@
+{
+  "name": "svelte-breakpoints",
+  "version": "0.1.0",
+  "svelte": "dist/index.js",
+  "module": "dist/index.mjs",
+  "main": "dist/index.umd.js",
+  "types": "dist/ts/index.d.ts",
+  "description": "A Svelte component for handling CSS media query breakpoints",
+  "scripts": {
+    "prebuild": "rm -rf ./dist",
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "prepublishOnly": "npm run build",
+    "svelte-check": "svelte-check"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-typescript": "^6.0.0",
+    "@tsconfig/svelte": "^1.0.10",
+    "fs-extra": "^9.0.1",
+    "glob": "^7.1.6",
+    "rollup": "^2.51.1",
+    "rollup-plugin-execute": "^1.1.1",
+    "rollup-plugin-filesize": "^9.0.2",
+    "rollup-plugin-commonjs": "^9.2.2",
+    "rollup-plugin-svelte": "^7.1.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "svelte": "^3.38.2",
+    "svelte-check": "^1.0.60",
+    "svelte-preprocess": "^4.5.1",
+    "tslib": "^2.0.3",
+    "typescript": "^4.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiosion/svelte-breakpoints.git"
+  },
+  "author": "kiosion",
+  "license": "MIT",
+  "keywords": [
+    "svelte",
+    "breakpoints",
+    "media queries"
+  ],
+  "files": [
+    "Breakpoints.svelte"
+  ]
+}
