@@ -35,7 +35,7 @@ Import the component and pass in the media queries to use. You can use either th
     lg: '(min-width: 1024px)',
   };
 
-  let matches: string | undefined;
+  let match: string | undefined;
 </script>
 
 <!-- Using named slots -->
@@ -51,7 +51,7 @@ Import the component and pass in the media queries to use. You can use either th
   <svelte:fragment>
 </Breakpoints>
 
-<!-- Binding to "matches" -->
+<!-- Binding to "match" -->
 <Breakpoints queries={mediaQueries} bind:match>
   {#if match === 'lg'}
     <p>Screen is at least 1024px wide</p>
