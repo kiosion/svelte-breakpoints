@@ -20,6 +20,7 @@ export default [
         format: "umd",
         name,
         sourcemap: true,
+        exports: "named",
         plugins: [
           execute([
             "tsc --outDir ./dist --declaration",
