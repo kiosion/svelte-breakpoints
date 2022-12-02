@@ -5,7 +5,9 @@
     "target": "es2017"
   },
   "include": [
-    "src"
+    "src",
+    "*.js",
+    "*.svelte"
   ],
   "exclude": [
     "node_modules",

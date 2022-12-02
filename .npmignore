@@ -1,6 +1,10 @@
 src
-demos
+demo
 scripts
 rollup.config.js
 **/tsconfig.json
 **/.gitignore
+**/node_modules
+.github
+.eslintrc
+.prettierrc.json

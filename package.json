@@ -5,13 +5,13 @@
   "module": "dist/index.mjs",
   "main": "dist/index.umd.js",
   "types": "dist/ts/index.d.ts",
-  "description": "Svelte component and helper function for handling CSS media queries",
+  "description": "Svelte component and helper function for creating easy dynamic layouts with CSS media queries.",
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "prepublishOnly": "npm run build",
-    "svelte-check": "svelte-check"
+    "prepublishOnly": "npm run lint && npm run build",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^23.0.3",
@@ -19,21 +19,29 @@
     "@rollup/plugin-terser": "^0.1.0",
     "@rollup/plugin-typescript": "^10.0.1",
     "@tsconfig/svelte": "^1.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
     "bumpp": "^8.2.1",
+    "eslint": "^8.28.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-svelte": "^2.13.1",
     "fs-extra": "^11.1.0",
     "glob": "^8.0.3",
+    "prettier": "^2.8.0",
+    "prettier-plugin-svelte": "^2.8.1",
     "rimraf": "^3.0.2",
     "rollup": "^3.5.1",
     "rollup-plugin-execute": "^1.1.1",
     "rollup-plugin-filesize": "^9.1.2",
     "rollup-plugin-svelte": "^7.1.0",
+    "svelte": "^3.5.0",
     "svelte-check": "^2.10.0",
     "svelte-preprocess": "^4.10.7",
     "tslib": "^2.4.1",
     "typescript": "^4.9.3"
   },
-  "dependencies": {
-    "svelte": "^3.53.1"
+  "peerDependencies": {
+    "svelte": "^3.5.0"
   },
   "repository": {
     "type": "git",

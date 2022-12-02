@@ -1,5 +1,10 @@
 import Breakpoints from './Breakpoints.svelte';
-import { useMediaQuery as mediaQueryFn } from './utils';
+import { useMediaQuery } from './utils';
+import type { BreakpointQueries, ExtBreakpointMatch } from './types';
 
-const useMediaQuery = mediaQueryFn.bind(null);
-export { Breakpoints as default, useMediaQuery };
+export {
+  Breakpoints as default,
+  useMediaQuery,
+  type BreakpointQueries,
+  type ExtBreakpointMatch as BreakpointMatch
+};
