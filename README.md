@@ -42,13 +42,13 @@ Import the component and pass in the media queries to use. You can use either th
 <Breakpoints queries={mediaQueries}>
   <svelte:fragment slot="lg">
     <p>Screen is at least 1024px wide</p>
-  <svelte:fragment>
+  </svelte:fragment>
   <svelte:fragment slot="md">
     <p>Screen is at least 768px wide</p>
-  <svelte:fragment>
+  </svelte:fragment>
   <svelte:fragment slot="sm">
     <p>Screen is less than 768px wide</p>
-  <svelte:fragment>
+  </svelte:fragment>
 </Breakpoints>
 
 <!-- Binding to "match" -->

@@ -5,10 +5,11 @@
     "target": "es2017"
   },
   "include": [
-    "src/**/*"
+    "src"
   ],
   "exclude": [
-    "node_modules/*",
-    "dist/*"
+    "node_modules",
+    "dist",
+    "demos"
   ]
 }

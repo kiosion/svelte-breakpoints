@@ -1,5 +1,5 @@
 import Breakpoints from './Breakpoints.svelte';
-import { useMediaQuery } from './utils';
+import { useMediaQuery as mediaQueryFn } from './utils';
 
-export default Breakpoints;
-export { useMediaQuery };
+const useMediaQuery = mediaQueryFn.bind(null);
+export { Breakpoints as default, useMediaQuery };

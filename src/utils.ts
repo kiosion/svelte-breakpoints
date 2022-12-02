@@ -3,8 +3,7 @@ import { readable } from 'svelte/store';
 export const useMediaQuery = (query: string) => {
   if (
     typeof window === 'undefined' ||
-    query === undefined || 
-    query === ''
+    !query
   ) {
     return readable(false);
   }

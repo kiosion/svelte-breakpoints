@@ -1,5 +1,6 @@
 src
+demos
 scripts
 rollup.config.js
-tsconfig.json
-.gitignore
+**/tsconfig.json
+**/.gitignore

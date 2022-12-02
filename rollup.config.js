@@ -3,7 +3,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import execute from "rollup-plugin-execute";
-import pkg from "./package.json";
+import pkg from "./package.json" assert { type: "json" };
 
 const name = pkg.name
   .replace(/^(@\S+\/)?(svelte-)?(\S+)/, "$3")
@@ -24,7 +24,7 @@ export default [
         plugins: [
           execute([
             "tsc --outDir ./dist --declaration",
-            "node scripts/preprocess.js",
+            "node scripts/preprocess.cjs",
           ]),
         ],
       },
