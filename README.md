@@ -15,14 +15,31 @@ $ npm install --save-dev svelte-breakpoints
 ### Helper
 Import `useMediaQuery` and pass in a valid CSS media query. It will return a readable store which will represent whether the media query matches or not as a boolean.
 
+```html
+<script>
+  ...
+  import { useMediaQuery } from 'svelte-breakpoints';
+
+  const isMobile = useMediaQuery('(max-width: 600px)');
+  // => Returns type Readable<boolean>
+
+  $: if ($isMobile) {
+    // do something
+  }
+
+</script>
+
+{#if $isMobile}
+  <!-- do something -->
+{/if}
+```
+
+It can be used for any valid CSS media queries.
+
 ```ts
 import { useMediaQuery } from 'svelte-breakpoints';
 
-const isMobile = useMediaQuery('(max-width: 600px)');
-
-$: if ($isMobile) {
-  // do something
-}
+const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
 ```
 
 ### Component
