@@ -13,18 +13,17 @@ $ npm install --save-dev svelte-breakpoints
 
 ## Usage
 ### Helper
-Import `useMediaQuery` and pass in a valid CSS media query. It will return a readable store which will represent whether the media query matches or not as a boolean.
+Import `useMediaQuery` and provide a valid CSS media query. It will return a readable boolean store representing whether the media query matches.
 
 ```html
 <script>
-  ...
   import { useMediaQuery } from 'svelte-breakpoints';
 
   const isMobile = useMediaQuery('(max-width: 600px)');
   // => Returns type Readable<boolean>
 
   $: if ($isMobile) {
-    // do something
+    console.log('Not desktop!');
   }
 
 </script>
@@ -45,11 +44,12 @@ const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
 ### Component
 Import the component and pass in the media queries to use. You can use either the default "sm"/"md"/"lg"/"xl" slots, or bind a variable to the "match" prop - this will return a readable store you can subscribe to, which will contain the name of the matching query, or `undefined` if none match.
 
-When using slots, the component will render the highest matching slot (e.g., if the both 'sm' and 'lg' queries match, it will render the 'lg' slot). If no slots match, it will render the default slot.
+When using slots, the component will render the highest matching slot (e.g., if both 'sm' and 'lg' queries match, it will render the 'lg' slot). If no slots match, it will render the default slot and simply provide the `match` prop for binding to.
 
 ```html
 <script lang="ts">
   import Breakpoints from 'svelte-breakpoints';
+  import type { Readable } from 'svelte/store';
   import type { BreakpointMatch } from 'svelte-breakpoints';
 
   const mediaQueries = {
@@ -58,7 +58,8 @@ When using slots, the component will render the highest matching slot (e.g., if 
     lg: '(min-width: 1024px)',
   };
 
-  let match: BreakpointMatch;
+  let match: Readable<BreakpointMatch>;
+  // type BreakpointMatch = 'sm' | 'md' | 'lg' | 'xl' | undefined
 </script>
 
 <!-- Using named slots -->
