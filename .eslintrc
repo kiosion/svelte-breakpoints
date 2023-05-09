@@ -25,6 +25,7 @@
     "@typescript-eslint/no-unsafe-call": ["off"],
     "@typescript-eslint/no-unsafe-member-access": ["off"],
     "@typescript-eslint/restrict-template-expressions": ["off"],
+    "@typescript-eslint/no-unnecessary-type-assertion": ["off"],
     "prettier/prettier": ["error"],
     "array-bracket-spacing": ["error", "never"],
     "arrow-spacing": ["error"],
@@ -37,7 +38,6 @@
     "curly": ["error"],
     "dot-notation": ["error"],
     "eqeqeq": ["error"],
-    "func-call-spacing": ["error", "never"],
     "key-spacing": ["error"],
     "keyword-spacing": ["error"],
     "linebreak-style": ["error"],
@@ -80,6 +80,15 @@
       "parser": "svelte-eslint-parser",
       "parserOptions": {
         "parser": "@typescript-eslint/parser"
+      }
+    },
+    {
+      "files": [
+        "*.cjs"
+      ],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-unsafe-argument": "off"
       }
     }
   ],
