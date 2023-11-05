@@ -1,6 +1,9 @@
 # svelte-breakpoints
 Svelte component and helper function for creating easy dynamic layouts with CSS media queries.
 
+> **Note**
+> Since this package relies on CSS Media Query Listeners, content outside the Default slot is *not* rendered server-side. If you need conditional layouts based on screen sizes, and need SSR compatibility, use CSS `@media` queries in your styles instead.
+
 ## Installation
 Install using yarn or npm:
 
