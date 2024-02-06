@@ -1,23 +1,24 @@
 <script lang="ts">
   import { get, readable, type Readable } from 'svelte/store';
-  import type { BreakpointQueries, BreakpointMatch } from './types';
-  import { useMediaQuery as mediaQueryFn } from './utils';
+  import { DEFAULT_BREAKPOINT_SIZES, useMediaQuery } from '$lib/utils';
 
-  const useMediaQuery = mediaQueryFn.bind(this);
+  import type { BreakpointQueries, BreakpointMatch } from '$lib/types';
 
   export let queries: BreakpointQueries | undefined;
 
-  const queryStores = Object.entries(queries).reduce(
+  const queryStores = Object.entries(queries ?? {}).reduce(
       (acc: Record<string, Readable<boolean>>, [key, query]) => {
-        const store = useMediaQuery(query);
-        acc[key] = store;
+        if (!query) {
+          return acc;
+        }
+        acc[key] = useMediaQuery(query);
         return acc;
       },
       {} as Record<string, Readable<boolean>>
     ),
     slotToUse = (match: BreakpointMatch) => {
       let slot: string | undefined;
-      ['xl', 'lg', 'md', 'sm'].forEach((key) => {
+      DEFAULT_BREAKPOINT_SIZES.forEach((key) => {
         if (slot) {
           return;
         }
@@ -63,5 +64,5 @@
 {:else if slot === 'sm'}
   <slot name="sm" />
 {:else if slot === 'default'}
-  <slot />
+  <slot {match} />
 {/if}

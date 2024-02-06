@@ -1,18 +1,21 @@
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
+  "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
     "sourceMap": true,
-    "target": "es2017"
+    "strict": true,
+    "module": "ES2022",
+    "moduleResolution": "Bundler"
   },
   "include": [
-    "src",
-    "*.js",
-    "*.svelte",
-    "scripts/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "demos"
+    "src/**/*",
+    "tests/**/*",
+    "vite.config.ts",
+    "playwright.config.ts"
   ]
 }

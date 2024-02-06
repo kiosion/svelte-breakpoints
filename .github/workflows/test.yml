@@ -1,0 +1,52 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+  workflow_call:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  vitest:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.17.1'
+      - name: Install PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: '8.6.0'
+      - name: Install Dependencies
+        run: pnpm install
+      - name: Run Tests
+        run: pnpm vitest --no-watch
+  playwright:
+    name: Playwright Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.17.1'
+      - name: Install PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: '8.6.0'
+      - name: Install Dependencies
+        run: pnpm install
+      - name: Run Tests
+        run: |
+          pnpm exec playwright install
+          pnpm playwright test

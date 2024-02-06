@@ -5,10 +5,13 @@ Svelte component and helper function for creating easy dynamic layouts with CSS 
 > Since this package relies on CSS Media Query Listeners, content outside the Default slot is *not* rendered server-side. If you need conditional layouts based on screen sizes, and need SSR compatibility, use CSS `@media` queries in your styles instead.
 
 ## Installation
-Install using yarn or npm:
+Install using yarn / pnpm / npm:
 
 ```bash
 $ yarn add -D svelte-breakpoints
+```
+```bash
+$ pnpm add -D svelte-breakpoints
 ```
 ```bash
 $ npm install --save-dev svelte-breakpoints
@@ -87,6 +90,12 @@ When using slots, the component will render the highest matching slot (e.g., if 
   {/if}
 </Breakpoints>
 ```
+
+## Development
+To build the package, install deps with `pnpm install`, then run `pnpm build`. This will output the compiled files to the `dist` directory. To run the demo app, use `pnpm dev`.
+
+### Testing
+To run the tests, use `pnpm test`. This runs all Playwright and Vitest tests.
 
 ## Issues
 If you find any issues, please [open a new issue](https://github.com/kiosion/svelte-breakpoints/issues/new), or submit a pull request!

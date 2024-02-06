@@ -1,5 +1,9 @@
 import { readable } from 'svelte/store';
 
+export const DEFAULT_BREAKPOINT_SIZES = [
+  'sm', 'md', 'lg', 'xl', 'default'
+] as const;
+
 export const useMediaQuery = (query: string) => {
   if (typeof window === 'undefined' || !query) {
     return readable(false);
