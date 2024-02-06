@@ -1,6 +1,6 @@
 {
   "name": "svelte-breakpoints",
-  "version": "0.3.0",
+  "version": "0.2.0",
   "description": "Svelte component and helper function for creating easy dynamic layouts with CSS media queries.",
   "repository": {
     "type": "git",

@@ -1,10 +1,14 @@
 src
-demo
-scripts
-rollup.config.js
+tests
 **/tsconfig.json
 **/.gitignore
 **/node_modules
+.svelte-kit
 .github
 .eslintrc
+.eslintignore
 .prettierrc.json
+.nvmrc
+playwright.config.ts
+svelte.config.js
+vite.config.js
