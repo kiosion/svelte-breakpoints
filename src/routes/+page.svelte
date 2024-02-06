@@ -5,9 +5,9 @@
 
   const mediaQueries = {
     sm: '(min-width: 0px)',
-    md: '(min-width: 640px)',
-    lg: '(min-width: 768px)',
-    xl: '(min-width: 1024px)',
+    md: '(min-width: 768px)',
+    lg: '(min-width: 900px)',
+    xl: '(min-width: 1200px)',
   } satisfies BreakpointQueries;
 
   let match: BreakpointMatch;

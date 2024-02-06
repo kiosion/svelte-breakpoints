@@ -11,5 +11,11 @@
     "strict": true,
     "module": "ES2022",
     "moduleResolution": "Bundler"
-  }
+  },
+  "include": [
+    "src/**/*",
+    "tests/**/*",
+    "vite.config.ts",
+    "playwright.config.ts"
+  ]
 }
