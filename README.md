@@ -91,6 +91,12 @@ When using slots, the component will render the highest matching slot (e.g., if 
 </Breakpoints>
 ```
 
+## Development
+To build the package, install deps with `pnpm install`, then run `pnpm build`. This will output the compiled files to the `dist` directory. To run the demo app, use `pnpm dev`.
+
+### Testing
+To run the tests, use `pnpm test`. This runs all Playwright and Vitest tests.
+
 ## Issues
 If you find any issues, please [open a new issue](https://github.com/kiosion/svelte-breakpoints/issues/new), or submit a pull request!
 
