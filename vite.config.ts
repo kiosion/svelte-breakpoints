@@ -7,5 +7,8 @@ export default defineConfig({
     rollupOptions: {
       external: ['svelte-breakpoints']
     }
+  },
+  test: {
+    include: ['src/**/*.{test,spec}.{js,ts}']
   }
 });
