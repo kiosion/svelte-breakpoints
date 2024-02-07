@@ -88,26 +88,26 @@ Import the component and pass in the media queries to use. By default, the compo
 <!-- Using snippets as children -->
 <Breakpoints queries={mediaQueries}>
   {#snippet small()}
-    <p>Screen is at least 1024px wide</p>
+    <p>Screen is less than 768px wide</p>
   {/snippet}
   {#snippet medium()}
     <p>Screen is at least 768px wide</p>
   {/snippet}
   {#snippet large()}
-    <p>Screen is less than 768px wide</p>
+    <p>Screen is at least 1024px wide</p>
   {/snippet}
 </Breakpoints>
 
 <!-- Rendering all matching snippets -->
 <Breakpoints queries={mediaQueries} renderAll>
   {#snippet small()}
-    <p>Screen is at least 1024px wide</p>
+    <p>Screen is less than 768px wide</p>
   {/snippet}
   {#snippet medium()}
     <p>Screen is at least 768px wide</p>
   {/snippet}
   {#snippet large()}
-    <p>Screen is less than 768px wide</p>
+    <p>Screen is at least 1024px wide</p>
   {/snippet}
 </Breakpoints>
 ```
