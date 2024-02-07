@@ -21,20 +21,20 @@ npm install --save-dev svelte-breakpoints
 ```
 
 ## Usage
-### Helper
+### Helpers
 Import `useMediaQuery` and provide a valid CSS media query. It will return a readable boolean store representing whether the media query matches.
 
 ```html
-<script>
+<script lang="ts">
   import { useMediaQuery } from 'svelte-breakpoints';
 
-  const isMobile = useMediaQuery('(max-width: 600px)');
-  // => Returns type Readable<boolean>
+  const isMobile: Readable<boolean> = useMediaQuery('(max-width: 600px)');
 
-  $: if ($isMobile) {
-    console.log('Not desktop!');
-  }
-
+  $effect(() => {
+    if ($isMobile) {
+      console.log('Not desktop!');
+    }
+  });
 </script>
 
 {#if $isMobile}
@@ -50,10 +50,29 @@ import { useMediaQuery } from 'svelte-breakpoints';
 const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
 ```
 
+`subscribeToQueries` allows subscribing to the state of multiple MQLs, as well as updating them after the initial function call. It returns a Readable store containing the names of all matching queries in an array.
+
+```html
+<script lang="ts">
+  import { subscribeToQueries } from 'svelte-breakpoints';
+
+  const mediaQueries = {
+    reduceMotion: '(prefers-reduced-motion: reduce)',
+    prefersDark: '(prefers-color-scheme: dark)'
+  };
+
+  const matches: Readable<string[]> = subscribeToQueries(mediaQueries);
+
+  $effect(() => {
+    if (matches.includes('reduceMotion')) {
+      console.log('Reduced motion is enabled');
+    }
+  });
+</script>
+```
+
 ### Component
 Import the component and pass in the media queries to use. By default, the component will only render the last matching snippet, or the default Slot if no queries match or no snippets are provided. Providing `renderAll` will render all matching snippets.
-
-You can also bind to `$matches`, which will return a Readable store containing the names of all matching queries.
 
 ```html
 <script lang="ts">
@@ -91,18 +110,26 @@ You can also bind to `$matches`, which will return a Readable store containing t
     <p>Screen is less than 768px wide</p>
   {/snippet}
 </Breakpoints>
+```
 
-<!-- Defining snippets elsewhere and passing in -->
+You can also define snippets elsewhere and pass them in via the `content` prop.
+
+```html
 {#snippet default()}
   <p>I'm defined elsewhere!</p>
 {/snippet}
 {#snippet small()}
   <p>I'm defined elsewhere too!</p>
 {/snippet}
-<!-- ... -->
-<Breakpoints queries={mediaQueries} content={{ small, default }} />
 
-<!-- Binding to `$matches` -->
+<!-- ... -->
+
+<Breakpoints queries={mediaQueries} content={{ small, default }} />
+```
+
+Binding to `$matches` returns a Readable store containing the names of all matching queries.
+
+```html
 <Breakpoints queries={mediaQueries} let:$matches>
   {#if $matches.includes('large')}
     <p>Screen is at least 1024px wide</p>
