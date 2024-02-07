@@ -70,7 +70,8 @@
       {
         "block": { "balanced": true }
       }
-    ]
+    ],
+    "svelte/valid-compile": ["off"]
   },
   "overrides": [
     { 

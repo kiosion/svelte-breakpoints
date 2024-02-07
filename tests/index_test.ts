@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 const breakpoints = {
   small: 320,
   medium: 800,
-  large: 1000,
+  large: 1050,
   'extra large': 1400
 };
 

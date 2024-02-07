@@ -1,9 +1,9 @@
 import type { Readable } from 'svelte/store';
-import { DEFAULT_BREAKPOINT_SIZES } from '$lib/utils';
+
+export type QueryKey = string;
 
 export type BreakpointQueries = {
-  [key in typeof DEFAULT_BREAKPOINT_SIZES[number]]?: string;
+  [key: QueryKey]: string;
 };
 
-export type BreakpointMatch = 'sm' | 'md' | 'lg' | 'xl' | undefined;
-export type ExtBreakpointMatch = Readable<BreakpointMatch>;
+export type BreakpointMatch = Readable<QueryKey | undefined>;

@@ -1,17 +1,9 @@
 <script lang="ts">
   import Breakpoints from '$lib';
-
-  import type { BreakpointMatch, BreakpointQueries } from '$lib';
-
-  const mediaQueries = {
-    sm: '(min-width: 0px)',
-    md: '(min-width: 768px)',
-    lg: '(min-width: 900px)',
-    xl: '(min-width: 1200px)',
-  } satisfies BreakpointQueries;
-
-  let match: BreakpointMatch;
+  import { DEFAULT_BREAKPOINT_SIZES } from '$lib/internal';
 </script>
+
+<svelte:options runes={true} />
 
 <svelte:head>
   <title>svelte-breakpoints</title>
@@ -23,25 +15,42 @@
 
   <div>
     <h2>The current breakpoint is: <strong>
-      <Breakpoints queries={mediaQueries}>
-        <svelte:fragment slot="sm">
-          <span class="sm">small</span>
-        </svelte:fragment>
-        <svelte:fragment slot="md">
-          <span class="md">medium</span>
-        </svelte:fragment>
-        <svelte:fragment slot="lg">
-          <span class="lg">large</span>
-        </svelte:fragment>
-        <svelte:fragment slot="xl">
-          <span class="xl">extra large</span>
-        </svelte:fragment>
+      <!-- Should be able to define snippets outside and pass them in as well -->
+      {#snippet xl2()}
+        <span>extra large 2</span>
+      {/snippet}
+
+      <Breakpoints queries={DEFAULT_BREAKPOINT_SIZES} content={{ xl2 }}>
+        {#snippet sm()}
+          <span>small</span>
+        {/snippet}
+        {#snippet md()}
+          <span>medium</span>
+        {/snippet}
+        {#snippet lg()}
+          <span>large</span>
+        {/snippet}
+        {#snippet xl()}
+          <span>extra large</span>
+        {/snippet}
         <span>unknown</span>
       </Breakpoints>
     </strong></h2>
 
-    <Breakpoints queries={mediaQueries} bind:match>
-      <h3>And here it is as a string, from binding to the store: {$match}</h3>
+    <Breakpoints queries={DEFAULT_BREAKPOINT_SIZES} let:$matches>
+      <p>Here are all matching queries from binding to the store: {$matches.join(', ')}</p>
+    </Breakpoints>
+
+    <Breakpoints queries={{
+      'dark': '(prefers-color-scheme: dark)',
+      'light': '(prefers-color-scheme: light)',
+    }}>
+      {#snippet dark()}
+        <p>This will only show when the preferred colour scheme is dark.</p>
+      {/snippet}
+      {#snippet light()}
+        <p>This will only show when the preferred colour scheme is light.</p>
+      {/snippet}
     </Breakpoints>
   </div>
 </section>
@@ -55,7 +64,7 @@
     gap: 1rem;
   }
 
-  h1, h2, h3 {
+  h1, h2, p {
     font-family: 'Inter', sans-serif;
     text-align: center;
   }
@@ -71,8 +80,8 @@
     font-weight: 500;
   }
 
-  h3 {
-    font-size: 1.25rem;
+  p {
+    font-size: 1rem;
     font-weight: 400;
   }
 

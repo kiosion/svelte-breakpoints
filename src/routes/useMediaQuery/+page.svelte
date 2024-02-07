@@ -4,6 +4,8 @@
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 </script>
 
+<svelte:options runes={true} />
+
 <svelte:head>
   <title>useMediaQuery</title>
   <meta name="description" content="svelte-breakpoints demo app" />
@@ -27,11 +29,11 @@
     background-color: #f5f5f5;
     color: #202020;
     transition: all 300ms ease;
+  }
 
-    &.dark {
-      background-color: #333;
-      color: #f1f1f1;
-    }
+  section.dark {
+    background-color: #333;
+    color: #f1f1f1;
   }
 
   h1, h2 {

@@ -5,19 +5,19 @@ Svelte component and helper function for creating easy dynamic layouts with CSS 
 > Since this package relies on CSS Media Query Listeners, content outside the Default slot is *not* rendered server-side. If you need conditional layouts based on screen sizes, and need SSR compatibility, use CSS `@media` queries in your styles instead.
 
 > [!Note]
-> v1.0 is currently in progress, and will include a rewrite of the component and helper function for use with Svelte v5's Runes. The current version is still available in the `v0` branch.
+> v1.0 is currently in progress, and includes a rewrite of the component and helper function for use with Svelte v5's Runes. The current version is still available in the [`v0` branch](https://github.com/kiosion/svelte-breakpoints/tree/v0).
 
 ## Installation
 Install using yarn / pnpm / npm:
 
 ```bash
-$ yarn add -D svelte-breakpoints
+yarn add -D svelte-breakpoints
 ```
 ```bash
-$ pnpm add -D svelte-breakpoints
+pnpm add -D svelte-breakpoints
 ```
 ```bash
-$ npm install --save-dev svelte-breakpoints
+npm install --save-dev svelte-breakpoints
 ```
 
 ## Usage
@@ -51,42 +51,60 @@ const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
 ```
 
 ### Component
-Import the component and pass in the media queries to use. You can use either the default "sm"/"md"/"lg"/"xl" slots, or bind a variable to the "match" prop - this will return a readable store you can subscribe to, which will contain the name of the matching query, or `undefined` if none match.
+Import the component and pass in the media queries to use. By default, the component will only render the last matching snippet, or the default Slot if no queries match or no snippets are provided. Providing `renderAll` will render all matching snippets.
 
-When using slots, the component will render the highest matching slot (e.g., if both 'sm' and 'lg' queries match, it will render the 'lg' slot). If no slots match, it will render the default slot and simply provide the `match` prop for binding to.
+You can also bind to `$matches`, which will return a Readable store containing the names of all matching queries.
 
 ```html
 <script lang="ts">
   import Breakpoints from 'svelte-breakpoints';
-  import type { Readable } from 'svelte/store';
-  import type { BreakpointMatch } from 'svelte-breakpoints';
 
   const mediaQueries = {
-    sm: '(min-width: 0px)',
-    md: '(min-width: 768px)',
-    lg: '(min-width: 1024px)',
+    small: '(min-width: 0px)',
+    medium: '(min-width: 768px)',
+    large: '(min-width: 1024px)',
   };
-
-  let match: Readable<BreakpointMatch>;
-  // type BreakpointMatch = 'sm' | 'md' | 'lg' | 'xl' | undefined
 </script>
 
-<!-- Using named slots -->
+<!-- Using snippets as children -->
 <Breakpoints queries={mediaQueries}>
-  <svelte:fragment slot="lg">
+  {#snippet small()}
     <p>Screen is at least 1024px wide</p>
-  </svelte:fragment>
-  <svelte:fragment slot="md">
+  {/snippet}
+  {#snippet medium()}
     <p>Screen is at least 768px wide</p>
-  </svelte:fragment>
-  <svelte:fragment slot="sm">
+  {/snippet}
+  {#snippet large()}
     <p>Screen is less than 768px wide</p>
-  </svelte:fragment>
+  {/snippet}
 </Breakpoints>
 
-<!-- Binding to "match" -->
-<Breakpoints queries={mediaQueries} bind:match>
-  {#if $match === 'lg'}
+<!-- Rendering all matching snippets -->
+<Breakpoints queries={mediaQueries} renderAll>
+  {#snippet small()}
+    <p>Screen is at least 1024px wide</p>
+  {/snippet}
+  {#snippet medium()}
+    <p>Screen is at least 768px wide</p>
+  {/snippet}
+  {#snippet large()}
+    <p>Screen is less than 768px wide</p>
+  {/snippet}
+</Breakpoints>
+
+<!-- Defining snippets elsewhere and passing in -->
+{#snippet default()}
+  <p>I'm defined elsewhere!</p>
+{/snippet}
+{#snippet small()}
+  <p>I'm defined elsewhere too!</p>
+{/snippet}
+<!-- ... -->
+<Breakpoints queries={mediaQueries} content={{ small, default }} />
+
+<!-- Binding to `$matches` -->
+<Breakpoints queries={mediaQueries} let:$matches>
+  {#if $matches.includes('large')}
     <p>Screen is at least 1024px wide</p>
   {:else}
     <p>Screen is less than 1024px wide</p>
@@ -94,11 +112,32 @@ When using slots, the component will render the highest matching slot (e.g., if 
 </Breakpoints>
 ```
 
+Since any valid CSS media queries can be used, you can also use queries such as `prefers-color-scheme`, `prefers-reduced-motion`, etc.
+
+```html
+<script lang="ts">
+  import Breakpoints from 'svelte-breakpoints';
+
+  const mediaQueries = {
+    reducedMotion: '(prefers-reduced-motion: reduce)',
+  };
+</script>
+
+<Breakpoints queries={mediaQueries}>
+  {#snippet reducedMotion()}
+    <p>Reduced motion is enabled</p>
+  {/snippet}
+  {#snippet default()}
+    <p>Reduced motion is not enabled</p>
+  {/snippet}
+</Breakpoints>
+```
+
 ## Development
 To build the package, install deps with `pnpm install`, then run `pnpm build`. This will output the compiled files to the `dist` directory. To run the demo app, use `pnpm dev`.
 
 ### Testing
-To run the tests, use `pnpm test`. This runs all Playwright and Vitest tests.
+To run all Playwright and Vitest tests, use `pnpm test`.
 
 ## Issues
 If you find any issues, please [open a new issue](https://github.com/kiosion/svelte-breakpoints/issues/new), or submit a pull request!
