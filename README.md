@@ -53,8 +53,6 @@ const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
 ### Component
 Import the component and pass in the media queries to use. By default, the component will only render the last matching snippet, or the default Slot if no queries match or no snippets are provided. Providing `renderAll` will render all matching snippets.
 
-You can also bind to `$matches`, which will return a Readable store containing the names of all matching queries.
-
 ```html
 <script lang="ts">
   import Breakpoints from 'svelte-breakpoints';
@@ -91,7 +89,11 @@ You can also bind to `$matches`, which will return a Readable store containing t
     <p>Screen is less than 768px wide</p>
   {/snippet}
 </Breakpoints>
+```
 
+You can also define snippets elsewhere and pass them in via the `content` prop.
+
+```html
 <!-- Defining snippets elsewhere and passing in -->
 {#snippet default()}
   <p>I'm defined elsewhere!</p>
@@ -99,9 +101,15 @@ You can also bind to `$matches`, which will return a Readable store containing t
 {#snippet small()}
   <p>I'm defined elsewhere too!</p>
 {/snippet}
-<!-- ... -->
-<Breakpoints queries={mediaQueries} content={{ small, default }} />
 
+<!-- ... -->
+
+<Breakpoints queries={mediaQueries} content={{ small, default }} />
+```
+
+Binding to `$matches` returns a Readable store containing the names of all matching queries.
+
+```html
 <!-- Binding to `$matches` -->
 <Breakpoints queries={mediaQueries} let:$matches>
   {#if $matches.includes('large')}

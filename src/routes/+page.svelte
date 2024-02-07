@@ -1,6 +1,6 @@
 <script lang="ts">
   import Breakpoints from '$lib';
-  import { DEFAULT_BREAKPOINT_SIZES } from '$lib/internal';
+  import { DEFAULT_BREAKPOINT_SIZES } from '$lib/internal.svelte';
 </script>
 
 <svelte:options runes={true} />

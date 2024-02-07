@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { get, readable } from 'svelte/store';
-  import { DEFAULT_BREAKPOINT_SIZES, useMediaQuery } from '$lib/internal';
+  import { DEFAULT_BREAKPOINT_SIZES, subscribeToQueries } from '$lib/internal.svelte';
 
   import type { Snippet } from 'svelte';
   import type { Readable } from 'svelte/store';
@@ -19,25 +18,7 @@
   // Fall back to default queries if none provided
   const QUERIES = $state(queries ?? DEFAULT_BREAKPOINT_SIZES);
 
-  const queryStores = $derived(
-    Object.entries(QUERIES).reduce(
-      (acc: Record<QueryKey, Readable<boolean>>, [key, query]) => {
-        return query ? { ...acc, [key]: useMediaQuery(query) } : acc;
-      },
-      {}
-    )
-  );
-
-  export const matches = readable<QueryKey[]>(undefined, (set) => {
-    const updateMatch = () =>
-      set(Object.entries(queryStores).filter(([_, store]) => get(store)).map(([name]) => name));
-
-    const unsubscribers = Object.values(queryStores).map((store) =>
-      store.subscribe(updateMatch)
-    );
-
-    return () => unsubscribers.forEach((fn) => fn());
-  });
+  export const matches = $derived(subscribeToQueries(QUERIES));
 
   const snippets = $derived.call(() => {
     if (
