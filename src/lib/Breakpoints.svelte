@@ -1,68 +1,79 @@
 <script lang="ts">
-  import { get, readable, type Readable } from 'svelte/store';
-  import { DEFAULT_BREAKPOINT_SIZES, useMediaQuery } from '$lib/utils';
+  import { get, readable } from 'svelte/store';
+  import { DEFAULT_BREAKPOINT_SIZES, useMediaQuery } from '$lib/internal';
 
-  import type { BreakpointQueries, BreakpointMatch } from '$lib/types';
+  import type { Snippet } from 'svelte';
+  import type { Readable } from 'svelte/store';
+  import type { BreakpointQueries, QueryKey } from '$lib/types';
 
-  export let queries: BreakpointQueries | undefined;
+  type Props = {
+    [key: Exclude<QueryKey, 'queries' | 'content' | 'match' | 'renderAll'>]: Snippet | unknown;
+    content?: Record<QueryKey, Snippet>;
+    queries?: BreakpointQueries;
+    match?: Readable<QueryKey | undefined>;
+    renderAll?: boolean;
+  };
 
-  const queryStores = Object.entries(queries ?? {}).reduce(
-      (acc: Record<string, Readable<boolean>>, [key, query]) => {
-        if (!query) {
-          return acc;
-        }
-        acc[key] = useMediaQuery(query);
-        return acc;
+  let { queries, renderAll = false, content = undefined, ...restProps } = $props<Props>();
+
+  // Fall back to default queries if none provided
+  const QUERIES = $state(queries ?? DEFAULT_BREAKPOINT_SIZES);
+
+  const queryStores = $derived(
+    Object.entries(QUERIES).reduce(
+      (acc: Record<QueryKey, Readable<boolean>>, [key, query]) => {
+        return query ? { ...acc, [key]: useMediaQuery(query) } : acc;
       },
-      {} as Record<string, Readable<boolean>>
-    ),
-    slotToUse = (match: BreakpointMatch) => {
-      let slot: string | undefined;
-      DEFAULT_BREAKPOINT_SIZES.forEach((key) => {
-        if (slot) {
-          return;
-        }
-        if (match === key && !!$$slots[key]) {
-          slot = key;
-        }
-      });
-      return slot ?? 'default';
-    };
+      {}
+    )
+  );
 
-  export const match = readable<BreakpointMatch>(undefined, (set) => {
-    const updateMatch = () => {
-        const matches = Object.entries(queryStores).reduce(
-            (acc, [key, store]) => {
-              acc[key] = get(store);
-              return acc;
-            },
-            {} as Record<string, boolean>
-          ),
-          breakpoint = Object.entries(matches).reduce((acc, [key, value]) => {
-            if (value) {
-              acc = key;
-            }
-            return acc;
-          }, undefined as string | undefined);
-        set(breakpoint as BreakpointMatch);
-      },
-      unsubscribe = Object.values(queryStores).map((store) =>
-        store.subscribe(updateMatch)
-      );
-    return () => unsubscribe.forEach((fn) => fn());
+  export const matches = readable<QueryKey[]>(undefined, (set) => {
+    const updateMatch = () =>
+      set(Object.entries(queryStores).filter(([_, store]) => get(store)).map(([name]) => name));
+
+    const unsubscribers = Object.values(queryStores).map((store) =>
+      store.subscribe(updateMatch)
+    );
+
+    return () => unsubscribers.forEach((fn) => fn());
   });
 
-  $: slot = slotToUse($match);
+  const snippets = $derived.call(() => {
+    if (
+      !$matches?.length ||
+      (!restProps && !content) ||
+      typeof restProps !== 'object' ||
+      (typeof restProps !== 'object' && typeof content !== 'object')
+    ) {
+      return [];
+    }
+
+    const arr = $matches.map((name) => {
+      // Need to assert restProps types in order to check if the snippet exists
+      const snippet = (restProps as Record<QueryKey, Snippet>)[name] || content?.[name];
+
+      if (typeof snippet === 'function') {
+        return [name, snippet];
+      }
+    }).filter((i) => !!i?.[1]) as ([QueryKey, Snippet])[];
+
+    return renderAll ? arr : arr.slice(arr.length - 1);
+  });
+
+  const fallback = $derived(typeof restProps?.default === 'function' ? restProps.default : typeof content?.default === 'function' ? content.default : undefined);
 </script>
 
-{#if slot === 'xl'}
-  <slot name="xl" />
-{:else if slot === 'lg'}
-  <slot name="lg" />
-{:else if slot === 'md'}
-  <slot name="md" />
-{:else if slot === 'sm'}
-  <slot name="sm" />
-{:else if slot === 'default'}
-  <slot {match} />
+<svelte:options runes={true} />
+
+{#if snippets.length}
+  {#each snippets as [name, snippet]}
+    <!-- TODO: Fix typing of this prop - for some reason `Snippet` only takes a generic of type `unknown[]`? -->
+    {@render snippet(name)}
+  {/each}
+{:else if fallback}
+    {@render fallback()}
+{:else if $$slots.default}
+<!-- Fall back to default slot -->
+<slot {$matches} />
 {/if}
