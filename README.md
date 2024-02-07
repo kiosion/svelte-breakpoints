@@ -1,8 +1,11 @@
 # svelte-breakpoints
 Svelte component and helper function for creating easy dynamic layouts with CSS media queries.
 
-> **Note**
+> [!Important]
 > Since this package relies on CSS Media Query Listeners, content outside the Default slot is *not* rendered server-side. If you need conditional layouts based on screen sizes, and need SSR compatibility, use CSS `@media` queries in your styles instead.
+
+> [!Note]
+> v1.0 is currently in progress, and includes a rewrite of the component and helper function for use with Svelte v5's Runes. The current version is still available in the [`v0` branch](https://github.com/kiosion/svelte-breakpoints/tree/v0).
 
 ## Installation
 Install using yarn / pnpm / npm:
