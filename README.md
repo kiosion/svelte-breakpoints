@@ -21,20 +21,20 @@ npm install --save-dev svelte-breakpoints
 ```
 
 ## Usage
-### Helper
+### Helpers
 Import `useMediaQuery` and provide a valid CSS media query. It will return a readable boolean store representing whether the media query matches.
 
 ```html
-<script>
+<script lang="ts">
   import { useMediaQuery } from 'svelte-breakpoints';
 
-  const isMobile = useMediaQuery('(max-width: 600px)');
-  // => Returns type Readable<boolean>
+  const isMobile: Readable<boolean> = useMediaQuery('(max-width: 600px)');
 
-  $: if ($isMobile) {
-    console.log('Not desktop!');
-  }
-
+  $effect(() => {
+    if ($isMobile) {
+      console.log('Not desktop!');
+    }
+  });
 </script>
 
 {#if $isMobile}
@@ -48,6 +48,27 @@ It can be used for any valid CSS media queries.
 import { useMediaQuery } from 'svelte-breakpoints';
 
 const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
+```
+
+`subscribeToQueries` allows subscribing to the state of multiple MQLs, as well as updating them after the initial function call. It returns a Readable store containing the names of all matching queries in an array.
+
+```html
+<script lang="ts">
+  import { subscribeToQueries } from 'svelte-breakpoints';
+
+  const mediaQueries = {
+    reduceMotion: '(prefers-reduced-motion: reduce)',
+    prefersDark: '(prefers-color-scheme: dark)'
+  };
+
+  const matches: Readable<string[]> = subscribeToQueries(mediaQueries);
+
+  $effect(() => {
+    if (matches.includes('reduceMotion')) {
+      console.log('Reduced motion is enabled');
+    }
+  });
+</script>
 ```
 
 ### Component
@@ -94,7 +115,6 @@ Import the component and pass in the media queries to use. By default, the compo
 You can also define snippets elsewhere and pass them in via the `content` prop.
 
 ```html
-<!-- Defining snippets elsewhere and passing in -->
 {#snippet default()}
   <p>I'm defined elsewhere!</p>
 {/snippet}
@@ -110,7 +130,6 @@ You can also define snippets elsewhere and pass them in via the `content` prop.
 Binding to `$matches` returns a Readable store containing the names of all matching queries.
 
 ```html
-<!-- Binding to `$matches` -->
 <Breakpoints queries={mediaQueries} let:$matches>
   {#if $matches.includes('large')}
     <p>Screen is at least 1024px wide</p>
