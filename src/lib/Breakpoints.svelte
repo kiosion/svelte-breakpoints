@@ -15,10 +15,15 @@
 
   let { queries, renderAll = false, content = undefined, ...restProps } = $props<Props>();
 
-  // Fall back to default queries if none provided
-  const QUERIES = $state(queries ?? DEFAULT_BREAKPOINT_SIZES);
+  let QUERIES = $state<BreakpointQueries>(queries ?? DEFAULT_BREAKPOINT_SIZES);
 
-  export const matches = $derived(subscribeToQueries(QUERIES));
+  $effect(() =>{
+    if (queries) {
+      QUERIES = queries;
+    }
+  });
+
+  export const matches = $derived<Readable<(keyof BreakpointQueries)[]>>(subscribeToQueries(QUERIES));
 
   const snippets = $derived.call(() => {
     if (
@@ -31,7 +36,6 @@
     }
 
     const arr = $matches.map((name) => {
-      // Need to assert restProps types in order to check if the snippet exists
       const snippet = (restProps as Record<QueryKey, Snippet>)[name] || content?.[name];
 
       if (typeof snippet === 'function') {
@@ -48,9 +52,8 @@
 <svelte:options runes={true} />
 
 {#if snippets.length}
-  {#each snippets as [name, snippet]}
-    <!-- TODO: Fix typing of this prop - for some reason `Snippet` only takes a generic of type `unknown[]`? -->
-    {@render snippet(name)}
+  {#each snippets as [_, snippet]}
+    {@render snippet()}
   {/each}
 {:else if fallback}
     {@render fallback()}
