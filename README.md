@@ -64,7 +64,7 @@ const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
   const matches: Readable<string[]> = subscribeToQueries(mediaQueries);
 
   $effect(() => {
-    if (matches.includes('reduceMotion')) {
+    if ($matches.includes('reduceMotion')) {
       console.log('Reduced motion is enabled');
     }
   });
