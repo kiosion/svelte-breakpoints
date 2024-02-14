@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { get, readable } from 'svelte/store';
+
   import { DEFAULT_BREAKPOINT_SIZES, subscribeToQueries } from '$lib/internal.svelte';
 
   import type { Snippet } from 'svelte';
@@ -23,11 +25,11 @@
     }
   });
 
-  export const matches = $derived<Readable<(keyof BreakpointQueries)[]>>(subscribeToQueries(QUERIES));
+  const internal_matches = $derived<Readable<(keyof BreakpointQueries)[]>>(subscribeToQueries(QUERIES));
 
   const snippets = $derived.call(() => {
     if (
-      !$matches?.length ||
+      !$internal_matches?.length ||
       (!restProps && !content) ||
       typeof restProps !== 'object' ||
       (typeof restProps !== 'object' && typeof content !== 'object')
@@ -35,7 +37,7 @@
       return [];
     }
 
-    const arr = $matches.map((name) => {
+    const arr = $internal_matches.map((name) => {
       const snippet = (restProps as Record<QueryKey, Snippet>)[name] || content?.[name];
 
       if (typeof snippet === 'function') {
@@ -47,6 +49,10 @@
   });
 
   const fallback = $derived(typeof restProps?.default === 'function' ? restProps.default : typeof content?.default === 'function' ? content.default : undefined);
+
+  export const matches = readable<(string | number)[]>([], (set) =>
+    (() => (internal_matches.subscribe(set))())
+  );
 </script>
 
 <svelte:options runes={true} />
@@ -56,8 +62,8 @@
     {@render snippet()}
   {/each}
 {:else if fallback}
-    {@render fallback()}
+  {@render fallback()}
 {:else if $$slots.default}
-<!-- Fall back to default slot -->
-<slot {$matches} />
+  <!-- Fall back to default slot -->
+  <slot $matches={$matches} />
 {/if}
