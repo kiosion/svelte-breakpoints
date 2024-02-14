@@ -1,8 +1,11 @@
 import { describe, it, expect } from 'vitest';
 
-// Stub out vitest for now
-describe('sum test', () => {
-  it('adds 1 + 2 to equal 3', () => {
-    expect(1 + 2).toBe(3);
+describe('index', () => {
+  it('exports expected members', async () => {
+    const lib = await import('$lib');
+
+    expect(lib.default).toBeDefined();
+    expect(lib.subscribeToQueries).toBeDefined();
+    expect(lib.useMediaQuery).toBeDefined();
   });
 });
