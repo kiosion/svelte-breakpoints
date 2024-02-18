@@ -27,7 +27,7 @@
 
   const internal_matches = $derived<Readable<(keyof BreakpointQueries)[]>>(subscribeToQueries(QUERIES));
 
-  const snippets = $derived.call(() => {
+  const snippets = $derived.by(() => {
     if (
       !$internal_matches?.length ||
       (!restProps && !content) ||
