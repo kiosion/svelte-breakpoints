@@ -60,7 +60,7 @@
     "eslint-plugin-svelte": "2.35.1",
     "jsdom": "^24.0.0",
     "prettier": "3.2.5",
-    "prettier-plugin-svelte": "3.1.2",
+    "prettier-plugin-svelte": "3.2.1",
     "publint": "0.2.7",
     "svelte": "^5.0.0-next.57",
     "svelte-check": "3.6.4",
