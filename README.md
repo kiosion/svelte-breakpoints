@@ -1,11 +1,11 @@
 # svelte-breakpoints
-Svelte component and helper function for creating easy dynamic layouts with CSS media queries.
+Svelte component and helper functions for creating easy dynamic layouts with CSS media queries.
 
 > [!Important]
 > Since this package relies on CSS Media Query Listeners, content outside the Default slot is *not* rendered server-side. If you need conditional layouts based on screen sizes, and need SSR compatibility, use CSS `@media` queries in your styles instead.
 
 > [!Note]
-> v1.0 is currently in progress, and includes a rewrite of the component and helper function for use with Svelte v5's Runes. The current version is still available in the [`v0` branch](https://github.com/kiosion/svelte-breakpoints/tree/v0).
+> v1.0 is currently in progress, and includes a rewrite of the component and helper function for use with Svelte v5's Runes. This readme references new functionality not present in the current version - the current version can be found under the [`v0` branch](https://github.com/kiosion/svelte-breakpoints/tree/v0).
 
 ## Installation
 Install using yarn / pnpm / npm:
@@ -72,7 +72,7 @@ const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
 ```
 
 ### Component
-Import the component and pass in the media queries to use. By default, the component will only render the last matching snippet, or the default Slot if no queries match or no snippets are provided. Providing `renderAll` will render all matching snippets.
+Import the component and pass in the media queries to use. By default, the component will only render the last matching snippet, or the 'default' snippet if no queries match, finally falling back to the Default Slot if no snippets are provided. Passing `renderAll` will render all matching snippets rather than the last matching.
 
 ```html
 <script lang="ts">
