@@ -28,8 +28,6 @@ const useMediaQuery = (query: string) => {
 };
 
 const subscribeToQueries = (queries: BreakpointQueries) => {
-  // TODO: This probably isn't needed
-  // need to write test to see if providing `queries` then updating the queries object works as expected
   const queryStores = $derived(
     Object.entries(queries).reduce(
       (

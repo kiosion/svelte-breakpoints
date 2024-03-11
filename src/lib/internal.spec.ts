@@ -1,7 +1,7 @@
 import { tick } from 'svelte';
 import { get } from 'svelte/store';
 import { beforeEach, describe, it, expect, vi } from 'vitest';
-import { useMediaQuery, subscribeToQueries } from '$lib/internal.svelte';
+import { useMediaQuery, subscribeToQueries, DEFAULT_BREAKPOINT_SIZES } from '$lib/internal.svelte';
 
 type MatchMediaMock = {
   triggerChange: (query: string, matches: boolean) => void;
@@ -59,13 +59,13 @@ describe('useMediaQuery', () => {
   });
 
   it('should return a readable store', () => {
-    const store = useMediaQuery('(min-width: 0px)');
+    const store = useMediaQuery(DEFAULT_BREAKPOINT_SIZES.sm);
 
     expect(store).toHaveProperty('subscribe');
   });
 
   it('should return a readable store that emits a boolean', () => {
-    const store = useMediaQuery('(min-width: 0px)');
+    const store = useMediaQuery(DEFAULT_BREAKPOINT_SIZES.sm);
 
     expect(get(store)).toEqual(expect.any(Boolean));
   });
@@ -97,14 +97,14 @@ describe('subscribeToQueries', () => {
   });
 
   it('initializes and reflects the current active queries', async () => {
-    matchMediaMock.triggerChange('(min-width: 0px)', true); // need to do this explicitly since the default is false
-    matchMediaMock.triggerChange('(min-width: 768px)', true);
-    matchMediaMock.triggerChange('(min-width: 1024px)', false);
+    matchMediaMock.triggerChange(DEFAULT_BREAKPOINT_SIZES.sm, true); // need to do this explicitly since the default is false
+    matchMediaMock.triggerChange(DEFAULT_BREAKPOINT_SIZES.md, true);
+    matchMediaMock.triggerChange(DEFAULT_BREAKPOINT_SIZES.lg, false);
 
     const queries = {
-      sm: '(min-width: 0px)',
-      md: '(min-width: 768px)',
-      lg: '(min-width: 1024px)'
+      sm: DEFAULT_BREAKPOINT_SIZES.sm,
+      md: DEFAULT_BREAKPOINT_SIZES.md,
+      lg: DEFAULT_BREAKPOINT_SIZES.lg
     };
 
     const querySubscriptions = subscribeToQueries(queries);
@@ -115,19 +115,21 @@ describe('subscribeToQueries', () => {
   });
 
   it('updates subscribers when query matches change', async () => {
-    matchMediaMock.triggerChange('(min-width: 768px)', false);
-    matchMediaMock.triggerChange('(min-width: 1024px)', false);
+    matchMediaMock.triggerChange(DEFAULT_BREAKPOINT_SIZES.md, false);
+    matchMediaMock.triggerChange(DEFAULT_BREAKPOINT_SIZES.lg, false);
 
     const queries = {
-      md: '(min-width: 768px)',
-      lg: '(min-width: 1024px)'
+      md: DEFAULT_BREAKPOINT_SIZES.md,
+      lg: DEFAULT_BREAKPOINT_SIZES.lg
     };
 
     const querySubscriptions = subscribeToQueries(queries);
 
     await tick();
 
-    matchMediaMock.triggerChange('(min-width: 1024px)', true);
+    expect(get(querySubscriptions)).toEqual([]);
+
+    matchMediaMock.triggerChange(DEFAULT_BREAKPOINT_SIZES.lg, true);
 
     await tick();
 
