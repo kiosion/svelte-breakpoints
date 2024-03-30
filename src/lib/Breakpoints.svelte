@@ -51,7 +51,7 @@
   const fallback = $derived(typeof restProps?.default === 'function' ? restProps.default : typeof content?.default === 'function' ? content.default : undefined);
 
   export const matches = readable<(string | number)[]>([], (set) =>
-    (() => (internal_matches.subscribe(set))())
+    internal_matches.subscribe((v) => set(v))
   );
 </script>
 
