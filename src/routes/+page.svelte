@@ -20,25 +20,27 @@
         <span>extra large 2</span>
       {/snippet}
 
-      <Breakpoints queries={DEFAULT_BREAKPOINT_SIZES} content={{ xl2 }}>
-        {#snippet sm()}
-          <span>small</span>
-        {/snippet}
-        {#snippet md()}
-          <span>medium</span>
-        {/snippet}
-        {#snippet lg()}
-          <span>large</span>
-        {/snippet}
-        {#snippet xl()}
-          <span>extra large</span>
-        {/snippet}
-        <span>unknown</span>
-      </Breakpoints>
+      <span data-test-id="current-match">
+        <Breakpoints queries={DEFAULT_BREAKPOINT_SIZES} content={{ xl2 }}>
+          {#snippet sm()}
+            small
+          {/snippet}
+          {#snippet md()}
+            medium
+          {/snippet}
+          {#snippet lg()}
+            large
+          {/snippet}
+          {#snippet xl()}
+            extra large
+          {/snippet}
+          unknown
+        </Breakpoints>
+      </span>
     </strong></h2>
 
     <Breakpoints queries={DEFAULT_BREAKPOINT_SIZES} let:$matches>
-      <p>Here are all matching queries from binding to the store: {$matches.join(', ')}</p>
+      <p>Here are all matching queries from binding to the store: <span data-test-id="matches-store">{$matches.join(', ')}</span></p>
     </Breakpoints>
 
     <Breakpoints queries={{

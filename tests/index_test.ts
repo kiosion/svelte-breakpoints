@@ -18,3 +18,27 @@ test('index page breakpoints respond to viewport changes', async ({ page }) => {
     ).toBeVisible();
   }
 });
+
+test('store of current matches functions as expected', async ({ page }) => {
+  await page.goto('/');
+
+  await page.setViewportSize({ width: 400, height: 600 });
+
+  await expect(page.locator('[data-test-id="matches-store"]')).toBeVisible();
+
+  expect(
+    await page.locator('[data-test-id="matches-store"]').textContent()
+  ).toEqual('sm');
+
+  await page.setViewportSize({ width: 800, height: 600 });
+
+  expect(
+    await page.locator('[data-test-id="matches-store"]').textContent()
+  ).toEqual('sm, md');
+
+  await page.setViewportSize({ width: 1050, height: 600 });
+
+  expect(
+    await page.locator('[data-test-id="matches-store"]').textContent()
+  ).toEqual('sm, md, lg');
+});
