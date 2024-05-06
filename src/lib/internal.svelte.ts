@@ -10,12 +10,12 @@ export const DEFAULT_BREAKPOINT_SIZES = {
   xl2: '(min-width: 1536px)'
 } as const;
 
-const useMediaQuery = (query: string) => {
+const useMediaQuery = (query: string, defaultState = false) => {
   if (typeof window === 'undefined' || !query) {
-    return readable(false);
+    return readable(defaultState);
   }
 
-  return readable(false, (set) => {
+  return readable(defaultState, (set) => {
     const m = window.matchMedia(query);
 
     set(m.matches);

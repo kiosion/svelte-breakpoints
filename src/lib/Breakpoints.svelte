@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { get, readable } from 'svelte/store';
+  import { readable } from 'svelte/store';
 
   import { DEFAULT_BREAKPOINT_SIZES, subscribeToQueries } from '$lib/internal.svelte';
 
@@ -19,7 +19,7 @@
 
   let QUERIES = $state<BreakpointQueries>(queries ?? DEFAULT_BREAKPOINT_SIZES);
 
-  $effect(() =>{
+  $effect(() => {
     if (queries) {
       QUERIES = queries;
     }

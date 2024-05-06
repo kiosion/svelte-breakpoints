@@ -1,7 +1,11 @@
 import { tick } from 'svelte';
 import { get } from 'svelte/store';
 import { beforeEach, describe, it, expect, vi } from 'vitest';
-import { useMediaQuery, subscribeToQueries, DEFAULT_BREAKPOINT_SIZES } from '$lib/internal.svelte';
+import {
+  useMediaQuery,
+  subscribeToQueries,
+  DEFAULT_BREAKPOINT_SIZES
+} from '$lib/internal.svelte';
 
 type MatchMediaMock = {
   triggerChange: (query: string, matches: boolean) => void;
