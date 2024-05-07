@@ -8,14 +8,24 @@
   import type { BreakpointQueries, QueryKey } from '$lib/types';
 
   type Props = {
-    [key: Exclude<QueryKey, 'queries' | 'content' | 'match' | 'renderAll'>]: Snippet | unknown;
-    content?: Record<QueryKey, Snippet>;
+    [key: Exclude<
+      QueryKey,
+      'queries' |
+      'content' |
+      'match' |
+      'renderAll' |
+      'children' |
+      'fallback'
+    >]: Snippet<[(string | number)[]]> | unknown;
+    fallback?: Snippet<[(string | number)[]]>;
+    children?: Snippet<[(string | number)[]]>;
+    content?: Record<QueryKey, Snippet<[(string | number)[]]>>;
     queries?: BreakpointQueries;
-    match?: Readable<QueryKey | undefined>;
+    matches?: Readable<(string | number)[]>;
     renderAll?: boolean;
   };
 
-  let { queries, renderAll = false, content = undefined, ...restProps } = $props<Props>();
+  let { queries, renderAll = false, content = undefined, ...restProps }: Props = $props();
 
   let QUERIES = $state<BreakpointQueries>(queries ?? DEFAULT_BREAKPOINT_SIZES);
 
@@ -38,17 +48,17 @@
     }
 
     const arr = $internal_matches.map((name) => {
-      const snippet = (restProps as Record<QueryKey, Snippet>)[name] || content?.[name];
+      const snippet = (restProps as Record<QueryKey, Snippet<[(string | number)[]]>>)[name] || content?.[name];
 
       if (typeof snippet === 'function') {
         return [name, snippet];
       }
-    }).filter((i) => !!i?.[1]) as ([QueryKey, Snippet])[];
+    }).filter((i) => !!i?.[1]) as ([QueryKey, Snippet<[(string | number)[]]>])[];
 
     return renderAll ? arr : arr.slice(arr.length - 1);
   });
 
-  const fallback = $derived(typeof restProps?.default === 'function' ? restProps.default : typeof content?.default === 'function' ? content.default : undefined);
+  const fallback = $derived(typeof restProps?.fallback === 'function' ? restProps.fallback : typeof content?.fallback === 'function' ? content.fallback : typeof restProps?.children === 'function' ? restProps.children : undefined);
 
   export const matches = readable<(string | number)[]>([], (set) =>
     internal_matches.subscribe((v) => set(v))
@@ -59,11 +69,8 @@
 
 {#if snippets.length}
   {#each snippets as [_, snippet]}
-    {@render snippet()}
+    {@render snippet($matches)}
   {/each}
 {:else if fallback}
-  {@render fallback()}
-{:else if $$slots.default}
-  <!-- Fall back to default slot -->
-  <slot $matches={$matches} />
+  {@render fallback($matches)}
 {/if}

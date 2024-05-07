@@ -1,6 +1,12 @@
 <script lang="ts">
   import Breakpoints from '$lib';
   import { DEFAULT_BREAKPOINT_SIZES } from '$lib/internal.svelte';
+  import { readable } from 'svelte/store';
+
+  import type { Readable } from 'svelte/motion';
+
+  // let component: { matches: Readable<(string | number)[]> } = $state({ matches: readable([]) }),
+  //   { matches } = $derived(component);
 </script>
 
 <svelte:options runes={true} />
@@ -34,13 +40,17 @@
           {#snippet xl()}
             extra large
           {/snippet}
-          unknown
+          {#snippet fallback()}
+            unknown
+          {/snippet}
         </Breakpoints>
       </span>
     </strong></h2>
 
-    <Breakpoints queries={DEFAULT_BREAKPOINT_SIZES} let:$matches>
-      <p>Here are all matching queries from binding to the store: <span data-test-id="matches-store">{$matches.join(', ')}</span></p>
+    <Breakpoints queries={DEFAULT_BREAKPOINT_SIZES}>
+      {#snippet fallback(matches)}
+        <p>Here are all matching queries from binding to the store: <span data-test-id="matches-store">{matches.join(', ')}</span></p>
+      {/snippet}
     </Breakpoints>
 
     <Breakpoints queries={{

@@ -114,8 +114,10 @@ Import the component and pass in the media queries to use. By default, the compo
 
 You can also define snippets elsewhere and pass them in via the `content` prop.
 
+`fallback` is reserved for fallback content if no snippets match. If no `fallback` is provided, the Default slot's content will be rendered.
+
 ```html
-{#snippet default()}
+{#snippet fallback()}
   <p>I'm defined elsewhere!</p>
 {/snippet}
 {#snippet small()}
@@ -124,13 +126,18 @@ You can also define snippets elsewhere and pass them in via the `content` prop.
 
 <!-- ... -->
 
-<Breakpoints queries={mediaQueries} content={{ small, default }} />
+<Breakpoints queries={mediaQueries} content={{ small }} {fallback} />
 ```
 
-Binding to `$matches` returns a Readable store containing the names of all matching queries.
+Binding to `component.matches` returns a Readable store containing the names of all matching queries.
 
 ```html
-<Breakpoints queries={mediaQueries} let:$matches>
+<script lang="ts">
+  let componentInstance: { matches: Readable<(string | number)[]> } = $state({ matches: readable([]) }),
+    { matches } = $derived(componentInstance);
+</script>
+
+<Breakpoints queries={mediaQueries} bind:this={componentInstance}>
   {#if $matches.includes('large')}
     <p>Screen is at least 1024px wide</p>
   {:else}
