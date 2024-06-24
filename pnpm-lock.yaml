@@ -57,8 +57,8 @@ devDependencies:
     specifier: 5.0.0-next.163
     version: 5.0.0-next.163
   svelte-check:
-    specifier: 3.8.0
-    version: 3.8.0(postcss@8.4.38)(svelte@5.0.0-next.163)
+    specifier: 3.8.1
+    version: 3.8.1(postcss@8.4.38)(svelte@5.0.0-next.163)
   tslib:
     specifier: 2.6.2
     version: 2.6.2
@@ -2504,8 +2504,8 @@ packages:
       has-flag: 4.0.0
     dev: true
 
-  /svelte-check@3.8.0(postcss@8.4.38)(svelte@5.0.0-next.163):
-    resolution: {integrity: sha512-7Nxn+3X97oIvMzYJ7t27w00qUf1Y52irE2RU2dQAd5PyvfGp4E7NLhFKVhb6PV2fx7dCRMpNKDIuazmGthjpSQ==}
+  /svelte-check@3.8.1(postcss@8.4.38)(svelte@5.0.0-next.163):
+    resolution: {integrity: sha512-KlQ0TRVe01mdvh49Ylkr9FQxO/UWbQOtaIrccl3gjgkvby1TxY41VkT7ijCl6i29FjaJPE4m6YGmhdqov0MfkA==}
     hasBin: true
     peerDependencies:
       svelte: ^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0
