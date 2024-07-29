@@ -62,7 +62,7 @@
     "jsdom": "24.1.0",
     "prettier": "3.2.5",
     "prettier-plugin-svelte": "3.2.5",
-    "publint": "0.2.8",
+    "publint": "0.2.9",
     "svelte": "5.0.0-next.200",
     "svelte-check": "3.8.4",
     "tslib": "2.6.3",
